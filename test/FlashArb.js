@@ -6,7 +6,12 @@ const UniswapV2Router="0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
 const SushiswapV1Router="0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F";
 const DAI="0x6B175474E89094C44Da98b954EedeAC495271d0F";
 const ETH="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-const AaveLendingPoolAddressesProvider="0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5";
+// MAINNET
+// const AaveLendingPoolAddressesProvider = "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5";
+// KOVAN
+const AaveLendingPoolAddressesProvider = "0x88757f2f99175387ab4c6a4b3067c77a695b0349";
+const ethscan = "https://kovan.etherscan.io";
+
 
 describe("FlashArb", () => {
   let flashArb;
@@ -22,9 +27,20 @@ describe("FlashArb", () => {
     // for it to be deployed(), which happens onces its transaction has been
     // mined.
     flashArb = await FlashArb.deploy(AaveLendingPoolAddressesProvider, UniswapV2Router, SushiswapV1Router);
-    await flashArb.deployed();
-    console.log('contract deployed at', flashArb.address);
+    // console.log(flashArb);
+    console.log(`Contract  ${ethscan}/address/${flashArb.address}`);
+
+    // await flashArb.deployed();
+    // console.log('contract deployed at', flashArb.address);
+
+    const tx0 = (await flashArb.deployed()).deployTransaction;
+    expect(tx0.hash).to.match(/^0x/);
+    console.log(`TX0       ${ethscan}/tx/${tx0.hash}`);
+
   });
+
+
+
 
   it("should complete an arbitrage", async () => {
     const asset = ETH;
